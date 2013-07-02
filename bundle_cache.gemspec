@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{Caches bundled gems on S3}
   spec.summary       = %q{Caches bundled gems on S3}
   spec.homepage      = "https://github.com/data-axle/bundle_cache"
-  spec.license       = "Proprietary"
+  spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
