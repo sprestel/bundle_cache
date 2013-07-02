@@ -13,10 +13,12 @@ Adding this to your Gemfile defeats the purpose. Instead, run
 
 You'll need to set some environment variables to make this work.
 
+```
 AWS_S3_KEY=<your aws access key>
 AWS_S3_SECRET=<your aws secret>
 AWS_S3_BUCKET=<your bucket name>
 BUNDLE_ARCHIVE=<the filename to use for your cache>
+```
 
 ## License
 
