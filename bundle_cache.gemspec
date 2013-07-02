@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["eric.barendt@infogroup.com"]
   spec.description   = %q{Caches bundled gems on S3}
   spec.summary       = %q{Caches bundled gems on S3}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/data-axle/bundle_cache"
   spec.license       = "Proprietary"
 
   spec.files         = `git ls-files`.split($/)
