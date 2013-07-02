@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+architecture = `uname -m`.strip
+file_name = "#{ENV['BUNDLE_ARCHIVE']}-#{architecture}.tgz"
+
+Dir.chdir(ENV['HOME'])
+`wget -O "remote_#{file_name}" "https://s3.amazonaws.com/#{ENV['AWS_S3_BUCKET']}/#{file_name}" && tar -xf "remote_#{file_name}"`
+`wget -O "remote_#{file_name}.sha2" "https://s3.amazonaws.com/#{ENV['AWS_S3_BUCKET']}/#{file_name}.sha2"`
