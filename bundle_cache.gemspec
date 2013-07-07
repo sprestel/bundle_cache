@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Eric Barendt"]
   spec.email         = ["eric.barendt@infogroup.com"]
   spec.description   = %q{Caches bundled gems on S3}
-  spec.summary       = %q{Caches bundled gems on S3}
+  spec.summary       = %q{Speed up your build on Travis CI by caching bundled gems in an S3 bucket}
   spec.homepage      = "https://github.com/data-axle/bundle_cache"
   spec.license       = "MIT"
 
