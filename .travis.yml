@@ -1,0 +1,25 @@
+---
+language: ruby
+rvm:
+- 1.9.3
+script: true
+bundler_args: --without development --path=~/.bundle
+before_install:
+- ! 'echo ''gem: --no-ri --no-rdoc'' > ~/.gemrc'
+before_script:
+- cd $TRAVIS_BUILD_DIR
+- rake build
+- gem install pkg/*.gem
+- bundle_cache_install
+script: true
+after_script:
+- bundle_cache
+env:
+  global:
+  - BUNDLE_ARCHIVE="bundle_cache_test"
+  - AWS_S3_BUCKET="bundle-cache"
+  - secure: ! 'SSwUAfmFH6uEZP+9NXD/gfSX4YWm7B4Z0XiCU5E2+cpF171Yw8aHjDhrvLug
+
+      CZo/1SB/9Xh8i/Z+jlrwX/8PjLy8Zd0GrATMIApgLro8GeW6fAOoWk3YoRCu
+
+      U0MG4Wos81DbnwJQGjlH+1PZmHeu40Lie1Tkju57+kWEVCICShQ='
