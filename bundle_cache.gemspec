@@ -6,8 +6,8 @@ require 'bundle_cache/version'
 Gem::Specification.new do |spec|
   spec.name          = "bundle_cache"
   spec.version       = BundleCache::VERSION
-  spec.authors       = ["Eric Barendt"]
-  spec.email         = ["eric.barendt@infogroup.com"]
+  spec.authors       = ["Eric Barendt", "Matias Korhonen"]
+  spec.email         = ["eric.barendt@infogroup.com", "me@matiaskorhonen.fi"]
   spec.description   = %q{Caches bundled gems on S3}
   spec.summary       = %q{Speed up your build on Travis CI by caching bundled gems in an S3 bucket}
   spec.homepage      = "https://github.com/data-axle/bundle_cache"
