@@ -31,14 +31,14 @@ Add these to your Travis configuration:
 bundler_args: --without development --path=~/.bundle
 before_install:
 - "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
-- gem install bundler fog bundle_cache
+- gem install bundler bundle_cache
 - bundle_cache_install
 after_script:
 - bundle_cache
 env:
   global:
-  - BUNDLE_ARCHIVE="place_directory_bundle"
-  - AWS_S3_BUCKET="travis.data-axle.infogroup.com"
+  - BUNDLE_ARCHIVE="your_project_bundle"
+  - AWS_S3_BUCKET="your_bucket"
   - RAILS_ENV=test
 ```
 
