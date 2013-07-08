@@ -5,7 +5,7 @@ rvm:
 script: true
 bundler_args: --without development --path=~/.bundle
 before_install:
-- ! 'echo ''gem: --no-ri --no-rdoc'' > ~/.gemrc'
+- echo 'gem: --no-ri --no-rdoc' > ~/.gemrc
 before_script:
 - cd $TRAVIS_BUILD_DIR
 - rake build
@@ -17,9 +17,8 @@ after_script:
 env:
   global:
   - BUNDLE_ARCHIVE="bundle_cache_test"
-  - AWS_S3_BUCKET="bundle-cache"
-  - secure: ! 'SSwUAfmFH6uEZP+9NXD/gfSX4YWm7B4Z0XiCU5E2+cpF171Yw8aHjDhrvLug
-
-      CZo/1SB/9Xh8i/Z+jlrwX/8PjLy8Zd0GrATMIApgLro8GeW6fAOoWk3YoRCu
-
-      U0MG4Wos81DbnwJQGjlH+1PZmHeu40Lie1Tkju57+kWEVCICShQ='
+  - AWS_S3_BUCKET="travis.data-axle.infogroup.com"
+  - secure: |-
+     etZRmvUnoJdOOU8jYuDnpWQhFLPCwGnP8cELYJU+ogrfPA3BmxeRj0qL5odK
+     NqcdSo3ff19du9sLAVIjumhbvaociGVPUrScF3KKaKTPmBnFfhtOGgN18AIB
+     398/7K4HEItFgjCOQRstLGA2G3H7vq8nAsIWMavJ6lrAZEQUJIY=
