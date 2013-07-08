@@ -1,5 +1,7 @@
 # BundleCache
 
+[![Build Status](https://travis-ci.org/data-axle/bundle_cache.png?branch=master)](https://travis-ci.org/data-axle/bundle_cache)
+
 Utility for caching bundled gems on S3. Useful for speeding up Travis builds - 
 it doesn't need to wait for `bundle install` to download/install all gems.
 
