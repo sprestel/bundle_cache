@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Eric Barendt"]
   spec.email         = ["eric.barendt@infogroup.com"]
   spec.description   = %q{Caches bundled gems on S3}
-  spec.summary       = %q{Caches bundled gems on S3}
+  spec.summary       = %q{Speed up your build on Travis CI by caching bundled gems in an S3 bucket}
   spec.homepage      = "https://github.com/data-axle/bundle_cache"
   spec.license       = "MIT"
 
@@ -18,7 +18,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "fog"
+  spec.add_dependency "aws-sdk", ">= 1.0.0"
+  spec.add_dependency "bundler"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"

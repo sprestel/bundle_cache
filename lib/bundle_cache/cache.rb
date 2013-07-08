@@ -1,8 +1,15 @@
 require "digest"
-require "fog"
+require "aws-sdk"
 
 module BundleCache
   def self.cache
+    # Setup AWS credentials
+    AWS.config({
+      :access_key_id => ENV["AWS_S3_KEY"],
+      :secret_access_key => ENV["AWS_S3_SECRET"],
+      :region => ENV["AWS_S3_REGION"] || "us-east-1"
+    })
+
     bucket_name     = ENV["AWS_S3_BUCKET"]
     architecture    = `uname -m`.strip
 
@@ -33,43 +40,27 @@ module BundleCache
       parts_pattern = File.expand_path(File.join("~", "#{file_name}.*"))
       parts = Dir.glob(parts_pattern).sort
 
-      storage = Fog::Storage.new({
-        :provider => "AWS",
-        :aws_access_key_id => ENV["AWS_S3_KEY"],
-        :aws_secret_access_key => ENV["AWS_S3_SECRET"],
-        :region => ENV["AWS_S3_REGION"] || "us-east-1"
-      })
+      s3 = AWS::S3.new
+      bucket = s3.buckets[bucket_name]
 
       puts "=> Uploading the bundle"
-      puts "  => Beginning multipart upload"
-      response = storage.initiate_multipart_upload bucket_name, file_name, { "x-amz-acl" => "public-read" }
-      upload_id = response.body['UploadId']
-      puts "    => Upload ID: #{upload_id}"
-
-      part_ids = []
+      gem_archive = bucket.objects[file_name]
 
       puts "  => Uploading #{parts.length} parts"
-      parts.each_with_index do |part, index|
-        part_number = (index + 1).to_s
-        puts "    => Uploading #{part}"
-        File.open part do |part_file|
-          response = storage.upload_part bucket_name, file_name, upload_id, part_number, part_file
-          part_ids << response.headers['ETag']
-          puts "      => Uploaded"
+      gem_archive.multipart_upload(:acl => :public_read) do |upload|
+        parts.each_with_index do |part, index|
+          puts "    => Uploading #{part}"
+          File.open part do |part_file|
+            upload.add_part(part_file)
+            puts "      => Uploaded"
+          end
         end
       end
-
-      puts "  => Completing multipart upload"
-      storage.complete_multipart_upload bucket_name, file_name, upload_id, part_ids
+      puts "  => Completed multipart upload"
 
       puts "=> Uploading the digest file"
-      bucket = storage.directories.new(key: bucket_name)
-      bucket.files.create({
-        :body         => bundle_digest,
-        :key          => digest_filename,
-        :public       => true,
-        :content_type => "text/plain"
-      })
+      hash_object = bucket.objects[digest_filename]
+      hash_object.write(bundle_digest, :acl => :public_read, :content_type => "text/plain")
     end
 
     puts "All done now."
