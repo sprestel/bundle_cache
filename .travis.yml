@@ -6,7 +6,7 @@ rvm:
 script: true
 bundler_args: --without development --path=~/.bundle
 before_install:
-- echo 'gem: --no-ri --no-rdoc' > ~/.gemrc
+- "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
 before_script:
 - cd $TRAVIS_BUILD_DIR
 - rake build
