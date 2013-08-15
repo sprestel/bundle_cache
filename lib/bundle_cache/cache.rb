@@ -37,6 +37,11 @@ module BundleCache
       puts "=> Preparing bundle archive"
       `cd ~ && tar -cjf #{file_name} .bundle && split -b 5m -a 3 #{file_name} #{file_name}.`
 
+      if 1 == $?.exitstatus
+        puts "=> Archive failed. Please make sure '--path=~/.bundle' is added to bundle_args."
+        exit 1
+      end
+
       parts_pattern = File.expand_path(File.join("~", "#{file_name}.*"))
       parts = Dir.glob(parts_pattern).sort
 
