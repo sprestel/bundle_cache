@@ -10,6 +10,8 @@ module BundleCache
       :region => ENV["AWS_S3_REGION"] || "us-east-1"
     })
 
+    acl_to_use = ENV["KEEP_BUNDLE_PRIVATE"] ? :private : :public_read
+
     bucket_name     = ENV["AWS_S3_BUCKET"]
     architecture    = `uname -m`.strip
 
@@ -52,7 +54,7 @@ module BundleCache
       gem_archive = bucket.objects[file_name]
 
       puts "  => Uploading #{parts.length} parts"
-      gem_archive.multipart_upload(:acl => :public_read) do |upload|
+      gem_archive.multipart_upload(:acl => acl_to_use) do |upload|
         parts.each_with_index do |part, index|
           puts "    => Uploading #{part}"
           File.open part do |part_file|
@@ -65,7 +67,7 @@ module BundleCache
 
       puts "=> Uploading the digest file"
       hash_object = bucket.objects[digest_filename]
-      hash_object.write(bundle_digest, :acl => :public_read, :content_type => "text/plain")
+      hash_object.write(bundle_digest, :acl => acl_to_use, :content_type => "text/plain")
     end
 
     puts "All done now."
