@@ -1,12 +1,14 @@
 #!/usr/bin/env ruby
 
-architecture = `uname -m`.strip
-file_name = "#{ENV['BUNDLE_ARCHIVE']}-#{architecture}.tgz"
+require_relative '../lib/bundle_cache'
 
-# See http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
-region   = ENV['AWS_S3_REGION'] || 'us-east-1'
-endpoint = region == 'us-east-1' ? 's3.amazonaws.com' : "s3-#{region}.amazonaws.com"
+required_env = %w(AWS_S3_KEY AWS_S3_SECRET AWS_S3_BUCKET BUNDLE_ARCHIVE)
 
-Dir.chdir(ENV['HOME'])
-`wget -O "remote_#{file_name}" "https://#{endpoint}/#{ENV['AWS_S3_BUCKET']}/#{file_name}" && tar -xf "remote_#{file_name}"`
-`wget -O "remote_#{file_name}.sha2" "https://#{endpoint}/#{ENV['AWS_S3_BUCKET']}/#{file_name}.sha2"`
+required_env.each do |var|
+  unless ENV[var]
+    puts "Missing ENV[#{var}]"
+    exit 1
+  end
+end
+
+BundleCache.install
