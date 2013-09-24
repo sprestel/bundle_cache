@@ -3,16 +3,14 @@ language: ruby
 rvm:
 - 1.9.3
 - 2.0.0
-script: true
 bundler_args: --without development --path=~/.bundle
 before_install:
 - "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
-before_script:
+script:
 - cd $TRAVIS_BUILD_DIR
 - rake build
 - gem install pkg/*.gem
 - bundle_cache_install
-script: true
 after_script:
 - bundle_cache
 env:
