@@ -1,4 +1,3 @@
----
 language: ruby
 rvm:
 - 1.9.3
@@ -17,7 +16,4 @@ env:
   global:
   - BUNDLE_ARCHIVE="bundle_cache_test"
   - AWS_S3_BUCKET="travis.data-axle.infogroup.com"
-  - secure: |-
-     etZRmvUnoJdOOU8jYuDnpWQhFLPCwGnP8cELYJU+ogrfPA3BmxeRj0qL5odK
-     NqcdSo3ff19du9sLAVIjumhbvaociGVPUrScF3KKaKTPmBnFfhtOGgN18AIB
-     398/7K4HEItFgjCOQRstLGA2G3H7vq8nAsIWMavJ6lrAZEQUJIY=
+  - secure: OpVVRrTLeXspiOE0TMXxah7QHPZasA4n+xf9XUwTh0Tq1z6F6Ojq8kz8XvRQOS9VsWKj5Xx8gmrJbzUx2MmKbJZvKi0f19oqJiEstVVfR+ATWzTaDkfl31WUowmvX7QVh8+ejfi9bQDMj9HkAkn6p0uGWZGDZQd5Q/OyVMka/9o=
