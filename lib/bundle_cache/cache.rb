@@ -11,15 +11,19 @@ module BundleCache
     })
 
     acl_to_use = ENV["KEEP_BUNDLE_PRIVATE"] ? :private : :public_read
+    bundle_dir = "~/.bundle"
+    bundle_dir = ENV["BUNDLE_DIR"] if ENV["BUNDLE_DIR"]
+    @processing_dir = ENV['PROCESS_DIR'] if ENV['PROCESS_DIR']
+    @processing_dir ||= ENV['HOME']
 
     bucket_name     = ENV["AWS_S3_BUCKET"]
     architecture    = `uname -m`.strip
 
     file_name       = "#{ENV['BUNDLE_ARCHIVE']}-#{architecture}.tgz"
-    file_path       = File.expand_path("~/#{file_name}")
+    file_path       = File.expand_path("#{@processing_dir}/#{file_name}")
     lock_file       = File.join(File.expand_path(ENV["TRAVIS_BUILD_DIR"].to_s), "Gemfile.lock")
     digest_filename = "#{file_name}.sha2"
-    old_digest      = File.expand_path("~/remote_#{digest_filename}")
+    old_digest      = File.expand_path("#{@processing_dir}/remote_#{digest_filename}")
 
     puts "Checking for changes"
     bundle_digest = Digest::SHA2.file(lock_file).hexdigest
@@ -37,14 +41,15 @@ module BundleCache
       end
 
       puts "=> Preparing bundle archive"
-      `cd ~ && tar -cjf #{file_name} .bundle && split -b 5m -a 3 #{file_name} #{file_name}.`
+      `tar -C #{File.dirname(bundle_dir)} -cjf #{@processing_dir}/#{file_name} #{File.basename(bundle_dir)} && split -b 5m -a 3 #{@processing_dir}/#{file_name} #{@processing_dir}/#{file_name}.`
 
       if 1 == $?.exitstatus
-        puts "=> Archive failed. Please make sure '--path=~/.bundle' is added to bundle_args."
+        puts "=> Archive failed. Please make sure '--path=#{bundle_dir}' is added to bundle_args."
         exit 1
       end
 
-      parts_pattern = File.expand_path(File.join("~", "#{file_name}.*"))
+
+      parts_pattern = File.expand_path(File.join(@processing_dir, "#{file_name}.*"))
       parts = Dir.glob(parts_pattern).sort
 
       s3 = AWS::S3.new

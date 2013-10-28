@@ -7,6 +7,10 @@ module BundleCache
     file_name = "#{ENV['BUNDLE_ARCHIVE']}-#{architecture}.tgz"
     digest_filename = "#{file_name}.sha2"
     bucket_name = ENV["AWS_S3_BUCKET"]
+    bundle_dir = "~/.bundle"
+    bundle_dir = ENV["BUNDLE_DIR"] if ENV["BUNDLE_DIR"]
+    @processing_dir = ENV['PROCESS_DIR'] if ENV['PROCESS_DIR']
+    @processing_dir ||= ENV['HOME']
 
     AWS.config({
       :access_key_id => ENV["AWS_S3_KEY"],
@@ -19,10 +23,8 @@ module BundleCache
     gem_archive = bucket.objects[file_name]
     hash_object = bucket.objects[digest_filename]
 
-    Dir.chdir(ENV['HOME'])
-
     puts "=> Downloading the bundle"
-    File.open("remote_#{file_name}", 'wb') do |file|
+    File.open("#{@processing_dir}/remote_#{file_name}", 'wb') do |file|
       gem_archive.read do |chunk|
         file.write(chunk)
       end
@@ -30,10 +32,10 @@ module BundleCache
     puts "  => Completed bundle download"
 
     puts "=> Extract the bundle"
-    `tar -xf "remote_#{file_name}"`
+    `tar -xf "#{@processing_dir}/remote_#{file_name}"`
 
     puts "=> Downloading the digest file"
-    File.open("remote_#{file_name}.sha2", 'wb') do |file|
+    File.open("#{@processing_dir}/remote_#{file_name}.sha2", 'wb') do |file|
       hash_object.read do |chunk|
         file.write(chunk)
       end
