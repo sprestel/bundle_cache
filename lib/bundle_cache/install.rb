@@ -7,6 +7,7 @@ module BundleCache
     file_name = "#{ENV['BUNDLE_ARCHIVE']}-#{architecture}.tgz"
     digest_filename = "#{file_name}.sha2"
     bucket_name = ENV["AWS_S3_BUCKET"]
+    bundle_dir = ENV["BUNDLE_DIR"] || "~/.bundle"
     processing_dir = ENV['PROCESS_DIR'] || ENV['HOME']
 
     AWS.config({
@@ -29,7 +30,7 @@ module BundleCache
     puts "  => Completed bundle download"
 
     puts "=> Extract the bundle"
-    `tar -xf "#{processing_dir}/remote_#{file_name}"`
+    `cd #{File.dirname(bundle_dir)} && tar -xf "#{processing_dir}/remote_#{file_name}"`
 
     puts "=> Downloading the digest file"
     File.open("#{processing_dir}/remote_#{file_name}.sha2", 'wb') do |file|
