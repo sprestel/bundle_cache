@@ -93,11 +93,11 @@ RSpec.configure do |config|
 =end
 end
 
-require 'vcr'
-
-VCR.configure do |c|
-  c.cassette_library_dir = 'vcr_cassettes'
-  c.hook_into :webmock # or :fakeweb
-  c.filter_sensitive_data('<ACCESS_TOKEN>') { ENV["DROPBOX_ACCESS_TOKEN"] }
-  c.default_cassette_options = { :record => :new_episodes }
-end
+# require 'vcr'
+# 
+# VCR.configure do |c|
+#   c.cassette_library_dir = 'vcr_cassettes'
+#   c.hook_into :webmock # or :fakeweb
+#   c.filter_sensitive_data('<ACCESS_TOKEN>') { ENV["DROPBOX_ACCESS_TOKEN"] }
+#   c.default_cassette_options = { :record => :new_episodes }
+# end
