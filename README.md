@@ -43,18 +43,17 @@ after_script:
 env:
   global:
   - BUNDLE_ARCHIVE="your_project_bundle"
-  - AWS_S3_BUCKET="your_bucket"
   - RAILS_ENV=test
 ```
 
-You'll also want to add your DROPBOX accesstoken to a secure section in there:
+You'll also want to add your *Dropbox* accesstoken to a secure section in there:
 
 1. Install the travis gem with gem install travis
 2. Log into Travis with travis login --auto (from inside your project respository directory)
-3. Encrypt your dropbox accesstoken with: travis encrypt DROPBOX_ACCESSTOKEN_="<<>YOUR TOKEN HERE>" --add (be sure to add your actual credentials inside the double quotes)
+3. Encrypt your dropbox accesstoken with: travis encrypt DROPBOX_ACCESSTOKEN="<YOUR TOKEN HERE>" --add (be sure to add your actual credentials inside the double quotes)
 
 
-[Dropbox Docu](https://www.dropbox.com/developers/reference/devguide)
+[dropbox dev guide](https://www.dropbox.com/developers/reference/devguide)
 
 ## Credits
 
