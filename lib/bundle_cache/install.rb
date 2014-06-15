@@ -2,6 +2,7 @@ require "digest"
 
 module BundleCache
   class Client
+
     def install
       files_downloaded? && extract_bundle
     end
@@ -10,6 +11,10 @@ module BundleCache
       puts "=> Completed bundle and digest download"
       puts "=> Extract the bundle"
       `cd #{File.dirname(bundle_dir)} && tar -xf "#{processing_dir}/remote_#{file_name}"`
+      if 1 == $?.exitstatus
+        puts "=> Archive extracting failed"
+        exit 1
+      end
     end
     
     def files_downloaded?

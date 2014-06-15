@@ -15,7 +15,8 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-ENV["BUNDLE_ARCHIVE"] = "my_bundle"
+ENV["BUNDLE_ARCHIVE"] = "bundle_archive"
+ENV["BUNDLE_DIR"] = File.dirname(__FILE__) + '/assets/bundle_dir/test_file.txt'
 
 require 'pry'
 
@@ -23,6 +24,15 @@ RSpec.configure do |config|
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
   config.order = :random
+
+  config.before(:suite) do
+    ENV["PROCESS_DIR"] = Dir.mktmpdir
+  end
+
+  config.after(:suite) do
+    FileUtils.rm_r ENV["PROCESS_DIR"]
+  end
+
 =begin
   # These two settings work together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with
@@ -81,4 +91,13 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 =end
+end
+
+require 'vcr'
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'vcr_cassettes'
+  c.hook_into :webmock # or :fakeweb
+  c.filter_sensitive_data('<ACCESS_TOKEN>') { ENV["DROPBOX_ACCESS_TOKEN"] }
+  c.default_cassette_options = { :record => :new_episodes }
 end

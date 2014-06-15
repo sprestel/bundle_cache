@@ -2,14 +2,8 @@ require 'digest'
 
 module BundleCache
   class Client
-    def initialize(dropbox_mode = false)
-      @dropbox_mode = dropbox_mode
-
-      if dropbox_mode?
-        required_env = %w(DROPBOX_ACCESS_TOKEN BUNDLE_ARCHIVE)
-      else
-        required_env = %w(AWS_S3_KEY AWS_S3_SECRET AWS_S3_BUCKET BUNDLE_ARCHIVE)
-      end
+    def initialize
+      required_env = %w(DROPBOX_ACCESS_TOKEN BUNDLE_ARCHIVE)
 
       required_env.each do |var|
         unless ENV[var]
@@ -18,63 +12,32 @@ module BundleCache
         end
       end
     end
-        
-    def download_file(file_name, processing_dir)
-      if dropbox_mode?
-        download_via_dropbox(file_name, processing_dir)
-      else
-        download_via_s3
-      end  
-    end
     
-    def upload_file(file_name, processing_dir)
-      if dropbox_mode?
-        upload_via_dropbox(file_name, processing_dir)
-      else
-        upload_via_s3
-      end
-    end
-    
-    def upload_via_dropbox(file_name, file_contents)
+    def upload_file(file_name, file_contents)
       puts "=> Uploading #{file_name}"
       get_client.put_file(file_name, file_contents, true)
     rescue => e
       puts e
     end
     
-    def upload_via_s3
-      # S3 mode not implemented yet
-    end
-    
-    def download_via_s3
-      # S3 mode not implemented yet
-    end
-    
-    def download_via_dropbox(file_name, processing_dir)
+    def download_file(file_name, processing_dir)
       contents, metadata = get_client.get_file_and_metadata(file_name)
-      open(file_path(processing_dir, "/remote_#{file_name}"), 'wb') {|f| f.puts contents }
+      open(file_path(processing_dir, "remote_#{file_name}"), 'wb') {|f| f.puts contents }
+      true
     rescue DropboxError => e
       if ["File not found", "File has been deleted"].include? e.message
         puts "There's no such archive #{file_name}!"
       else
         raise e
       end
-      return false
+      false
     rescue DropboxAuthError => e
       puts e.message
-      return false
+      false
     end
 
     def get_client
-      if dropbox_mode?
-        @client ||= DropboxClient.new(ENV["DROPBOX_ACCESS_TOKEN"])
-      else
-        # S3 mode not implemented yet
-      end
-    end
-
-    def dropbox_mode?
-      @dropbox_mode
+      @client ||= DropboxClient.new(ENV["DROPBOX_ACCESS_TOKEN"])
     end
     
     private
@@ -104,11 +67,11 @@ module BundleCache
     end
     
     def old_digest_path
-      File.expand_path(file_path(processing_dir, "/remote_#{digest_filename}"))
+      File.expand_path(file_path(processing_dir, "remote_#{digest_filename}"))
     end
     
     def file_path(processing_dir, file_name)
-      "#{processing_dir}/#{file_name}"
+      File.join(processing_dir, file_name)
     end
     
     def lock_file

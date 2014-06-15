@@ -2,4 +2,4 @@
 
 require_relative '../lib/bundle_cache'
 
-BundleCache::Client.new(ENV["USE_DROPBOX"].to_s == "1").cache
+BundleCache::Client.new.cache
