@@ -21,9 +21,8 @@ describe BundleCache::Client do
     it { expect{subject.install}.not_to raise_exception }
     
     it "downloads 2 files" do
-      VCR.use_cassette("install_loads_2_files", :preserve_exact_body_bytes => true) do
-        subject.install
-      end
+      subject.install
+
       file1 = File.expand_path(subject.send(:file_path, processing_dir, "remote_#{file_name}"))
       file2 = File.expand_path(subject.send(:file_path, processing_dir, "remote_#{digest_filename}"))
       expect(File.exists?(file1)).to be true
