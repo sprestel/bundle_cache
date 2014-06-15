@@ -6,11 +6,11 @@ require 'bundle_cache/version'
 Gem::Specification.new do |spec|
   spec.name          = "bundle_cache"
   spec.version       = BundleCache::VERSION
-  spec.authors       = ["Eric Barendt", "Matias Korhonen"]
-  spec.email         = ["eric.barendt@infogroup.com", "me@matiaskorhonen.fi"]
-  spec.description   = %q{Caches bundled gems on S3}
-  spec.summary       = %q{Speed up your build on Travis CI by caching bundled gems in an S3 bucket}
-  spec.homepage      = "https://github.com/data-axle/bundle_cache"
+  spec.authors       = ["Sebastian Prestel"]
+  spec.email         = ["sebastian.prestel@yahoo.de"]
+  spec.description   = %q{Caches bundled gems on dropbox}
+  spec.summary       = %q{Speed up your build on Travis CI by caching bundled gems in a dropbox}
+  spec.homepage      = "https://github.com/sprestel/bundle_cache"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
@@ -22,4 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "bundler"
 
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "rspec"
+  spec.add_development_dependency "vcr"
+  spec.add_development_dependency "pry"
 end

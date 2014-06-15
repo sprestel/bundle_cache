@@ -2,13 +2,4 @@
 
 require_relative '../lib/bundle_cache'
 
-required_env = %w(DROPBOX_ACCESS_TOKEN BUNDLE_ARCHIVE)
-
-required_env.each do |var|
-  unless ENV[var]
-    puts "Missing ENV[#{var}]"
-    exit 1
-  end
-end
-
-BundleCache.install
+BundleCache::Client.new(ENV["USE_DROPBOX"].to_s == "1").install
