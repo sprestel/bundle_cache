@@ -1,5 +1,7 @@
 # BundleCache on Dropbox
 
+[![Build Status](https://travis-ci.org/sprestel/bundle_cache.svg?branch=dropbox_sdk)](https://travis-ci.org/sprestel/bundle_cache)
+
 Utility for caching bundled gems on your Dropbox. Useful for speeding up Travis builds - 
 it doesn't need to wait for `bundle install` to download/install all gems.
 
