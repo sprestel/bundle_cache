@@ -17,7 +17,7 @@
 
 ENV["BUNDLE_ARCHIVE"] = "bundle_archive"
 ENV["BUNDLE_DIR"] = File.dirname(__FILE__) + '/assets/bundle_dir/test_file.txt'
-
+ENV["DROPBOX_ACCESS_TOKEN"] = "ignored"
 require 'pry'
 
 RSpec.configure do |config|
