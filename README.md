@@ -1,8 +1,6 @@
-# BundleCache
+# BundleCache on Dropbox
 
-[![Build Status](https://travis-ci.org/data-axle/bundle_cache.png?branch=master)](https://travis-ci.org/data-axle/bundle_cache)
-
-Utility for caching bundled gems on S3. Useful for speeding up Travis builds - 
+Utility for caching bundled gems on your Dropbox. Useful for speeding up Travis builds - 
 it doesn't need to wait for `bundle install` to download/install all gems.
 
 ## Installation
@@ -16,13 +14,17 @@ Adding this to your Gemfile defeats the purpose. Instead, run
 You'll need to set some environment variables to make this work.
 
 ```
-AWS_S3_KEY=<your aws access key>
-AWS_S3_SECRET=<your aws secret>
-AWS_S3_BUCKET=<your bucket name>
+DROPBOX_ACCESSTOKEN_=<your access token here>
 BUNDLE_ARCHIVE=<the filename to use for your cache>
 ```
 
-Optionally, you can set the `AWS_S3_REGION` variable if you don't use us-east-1.
+## Dropbox Accesstoken
+Easy:
+1. Login to your Dropbox Account
+2. Go to https://www.dropbox.com/developers/apps
+3. Create new App
+4. Generate ACCESS_TOKEN
+5. Notice for upcoming tasks.
 
 ## Travis configuration
 
@@ -31,8 +33,11 @@ Add these to your Travis configuration:
 bundler_args: --without development --path=~/.bundle
 before_install:
 - "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
-- gem install bundler bundle_cache
+- git clone https://github.com/sprestel/bundle_cache.git
+- cd bundle_cache && git checkout dropbox_sdk && gem build bundle_cache.gemspec
+- gem install bundler bundle_cache*.gem
 - bundle_cache_install
+- cd ..
 after_script:
 - bundle_cache
 env:
@@ -42,15 +47,21 @@ env:
   - RAILS_ENV=test
 ```
 
-You'll also want to add your AWS credentials to a secure section in there. Full instructions
-are on Matias' site below, but if you've already added the above Travis configuration, this will
-add the AWS credentials:
+You'll also want to add your DROPBOX accesstoken to a secure section in there:
 
 1. Install the travis gem with gem install travis
 2. Log into Travis with travis login --auto (from inside your project respository directory)
-3. Encrypt your S3 credentials with: travis encrypt AWS_S3_KEY="" AWS_S3_SECRET="" --add (be sure to add your actual credentials inside the double quotes)
+3. Encrypt your dropbox accesstoken with: travis encrypt DROPBOX_ACCESSTOKEN_="<<>YOUR TOKEN HERE>" --add (be sure to add your actual credentials inside the double quotes)
+
+
+[Dropbox Docu](https://www.dropbox.com/developers/reference/devguide)
+
+## Credits
+
+Original code based on the [bundle_cache](https://github.com/data-axle/bundle_cache) gem,
+originally by [DATA AXLE](https://github.com/data-axle)
+
+Thank you to Data Axel and all of bundle_cache contributors!
 
 ## License
-
-This code was originally written by Matias Korhonen and is available at 
-http://randomerrata.com/post/45827813818/travis-s3. It is MIT licensed.
+It is MIT licensed.

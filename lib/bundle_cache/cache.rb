@@ -27,7 +27,6 @@ module BundleCache
         upload_file(file_name, open(file_path(processing_dir,"#{file_name}"), "r").read)
         upload_file(digest_filename, bundle_digest)
       rescue
-         # handles error
          retry  # restart from beginning
       end
     end
